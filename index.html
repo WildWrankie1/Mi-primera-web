@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi primera web</title>
+    <style>
+
+        body{
+            font-family: sans-serif; 
+            text-align: center;
+        }
+
+        h1 {
+            color:#2c3e50;
+            font-size: 40px;
+            border-bottom: 2px solid #3498db;
+            display: inline-block;
+            padding: 20px;
+            margin-bottom: 50px;
+        }
+
+        p {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        #lista-skills {
+            background-color: #dbdada;
+            padding: 20px;
+            list-style-type: "👽";
+            width: 200px;
+            border-radius: 10px;
+        }
+
+        .clase-estudios {
+            background-color: green;
+        }
+
+        .clase-hobbies {
+            background-color: orange;
+            list-style-type: "👾";
+        }
+
+        .dark-mode {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        .contenedor-listas {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .dark-mode h1 {
+            color: white;
+        }
+
+        .dark-mode p {
+            color: #bdc3c7;
+        }
+
+        .dark-mode #lista-skills {
+            background-color: #3b95ee;
+            
+        }
+
+        @media (max-width: 600px) {
+            .contenedor-listas {
+                flex-direction: column;
+                align-items: center;
+                
+        }
+
+        h1{
+            font-size: 25px;
+        }
+
+        
+    }
+
+    .link-red {
+    display: inline-block;
+    margin: 10px;
+    padding: 8px 15px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s; /* Animación suave */
+}
+
+.link-red:hover {
+    background-color: #2980b9;
+    transform: scale(1.1); /* Se hace un poquito más grande al pasar el mouse */
+}
+
+    </style>
+</head>
+<body>
+
+
+
+
+    <button id="tu-boton-id">Cambiar color</button>
+
+    <p id = "contador-visual">Has cambiado el modo de color 0 veces</p>
+    <br>
+
+
+
+<input type="text" id="input-nombre-nuevo" placeholder ="Escribe tu nuevo nombre">
+<button id="boton-guardar-nombre"> Cambiar y Guardar nombre</button>
+<br>
+
+
+
+    <h1>Francisco Javier</h1><br>
+
+
+
+    <button id="boton-guardar-nombre">Guardar mi nombre</button>
+
+
+
+
+
+    <p>Ingeniero de Software</p>
+
+    <div class="contenedor-listas">
+        <ul class="clase-estudios">
+         <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+        </ul>
+
+        <ol class="clase-hobbies">
+            <li>Trabajar</li>
+            <li>Jugar</li>
+            <li>Comer</li>
+        </ol>
+    </div>
+
+
+    <a href="https://www.google.com">Ir a Google</a>
+
+
+    <div class="panel-control">
+        <input type="text" id="input-habilidad" placeholder="Nueva habilidad...">
+        <button id="boton-agregar">Añadir a la lista</button>
+    </div>
+
+
+
+
+
+    <h3>Mis Skills (Generadas con JS)</h3>
+<ul id="lista-skills"></ul>
+
+
+<div id="contenedor-redes">
+<h3>Mis Redes Sociales (Generadas con JS)</h3>
+<ul id="lista-redes"></ul>
+</div>
+
+
+
+
+
+
+
+    <script>
+
+
+const nombreGuardado = localStorage.getItem("h1");
+
+if (nombreGuardado) {
+    document.querySelector('h1').innerText = nombreGuardado;
+}
+
+
+        const boton = document.querySelector('#tu-boton-id');
+const textoContador = document.querySelector('#contador-visual'); // Referencia al texto
+
+let contador = 0; // La variable vive fuera para que no se resetee
+
+boton.addEventListener('click', () => {
+    // 1. Cambiamos el modo
+    const esModoOscuro = document.body.classList.toggle('dark-mode');
+    
+    // 2. Cambiamos el texto del botón usando un operador ternario (un IF elegante)
+    boton.innerText = esModoOscuro ? "Modo Claro" : "Modo Oscuro";
+
+    // 3. ¡Sumamos y actualizamos la pantalla!
+    contador++; 
+    textoContador.innerText = `Has cambiado el modo de color ${contador} veces`;
+});
+
+
+
+
+
+
+
+
+// --- INTRODUCCIÓN A ARRAYS ---
+const redes = ["LinkedIn", "GitHub", "Twitter"];
+const contenedorRedes = document.querySelector('#contenedor-redes');
+console.log("Mis redes son:", redes[0]); 
+
+redes.forEach(red => {
+    const enlace = document.createElement('a');
+        enlace.innerText = red;
+        enlace.href = "#";
+        enlace.classList.add('link-red');
+
+
+        contenedorRedes.appendChild(enlace);
+        
+});
+
+
+
+
+
+
+
+const habilidades = ["React", "Node", "SQL", "Python", "AWS"];
+const contenedorUL = document.querySelector('#lista-skills');
+habilidades.forEach(skill => {
+  const nuevoItem = document.createElement('li');
+
+  nuevoItem.innerText = skill;
+  contenedorUL.appendChild(nuevoItem);
+  nuevoItem.addEventListener('click', () => nuevoItem.remove());
+});
+
+
+
+const botonAgregar = document.querySelector('#boton-agregar');
+const inputHabilidad = document.querySelector('#input-habilidad');
+
+botonAgregar.addEventListener('click', () => {
+    const texto = inputHabilidad.value;
+
+    if (texto !== "") {
+        const nuevoItem = document.createElement('li');
+        nuevoItem.innerText = texto;
+        nuevoItem.addEventListener('click', () => nuevoItem.remove());
+        contenedorUL.appendChild(nuevoItem);
+        inputHabilidad.value = "";
+        inputHabilidad.focus();
+    } else {
+        alert("¡Escribe algo primero, Ingeniero!");
+    }
+    });
+
+    localStorage.setItem("h1", "Francisco Javier");
+    let miNombre = localStorage.getItem("h1");
+
+
+
+
+
+
+    const botonGuardarNombre =document.querySelector('#boton-guardar-nombre');
+    const inputNombreNuevo = document.querySelector('#input-nombre-nuevo');
+    const tituloPrincipal = document.querySelector('h1');
+
+        botonGuardarNombre.addEventListener('click', () => {
+            const nuevoNombre = inputNombreNuevo.value;
+            if (nuevoNombre !== "") {
+                tituloPrincipal.innerText = nuevoNombre;
+                localStorage.setItem("h1", nuevoNombre);
+                alert("¡Tu nombre se ha guardado!");
+                inputNombreNuevo.value = "";
+            }
+        });
+
+        botonGuardarNombre.addEventListener('click', () => {
+            localStorage.setItem("h1", miNombre);
+            alert("¡Tu nombre se ha guardado!");
+        });
+
+
+
+</script>  
+
+
+
+
+
+
+
+       
+</body>
+</html>
