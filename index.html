@@ -81,7 +81,7 @@
         }
 
         
-    }
+    
 
     .link-red, button {
     display: inline-block;
@@ -221,131 +221,81 @@ section:hover {
         
 
 
-const nombreGuardado = localStorage.getItem("h1");
+<script>
+    // 1. REFERENCIAS Y VARIABLES
+    const tituloPrincipal = document.querySelector('h1');
+    const contenedorUL = document.querySelector('#lista-skills');
+    const inputHabilidad = document.querySelector('#input-habilidad');
+    const inputNombreNuevo = document.querySelector('#input-nombre-nuevo');
 
-if (nombreGuardado) {
-    document.querySelector('h1').innerText = nombreGuardado;
-}
+    // 2. CARGAR NOMBRE DEL BAÚL
+    const nombreGuardado = localStorage.getItem("h1");
+    if (nombreGuardado) tituloPrincipal.innerText = nombreGuardado;
 
+    // 3. CARGAR HABILIDADES DEL BAÚL
+    // Si el baúl está vacío, usamos una lista por defecto
+    let habilidades = JSON.parse(localStorage.getItem("misSkills")) || ["HTML", "CSS", "JS"];
 
-        
-
-        const boton = document.querySelector('#tu-boton-id');
-const textoContador = document.querySelector('#contador-visual'); // Referencia al texto
-
-let contador = 0; // La variable vive fuera para que no se resetee
-
-boton.addEventListener('click', () => {
-    // 1. Cambiamos el modo
-    const esModoOscuro = document.body.classList.toggle('dark-mode');
-    
-    // 2. Cambiamos el texto del botón usando un operador ternario (un IF elegante)
-    boton.innerText = esModoOscuro ? "Modo Claro" : "Modo Oscuro";
-
-    // 3. ¡Sumamos y actualizamos la pantalla!
-    contador++; 
-    textoContador.innerText = `Has cambiado el modo de color ${contador} veces`;
-});
-
-
-
-
-
-
-
-
-// --- INTRODUCCIÓN A ARRAYS ---
-const redes = ["LinkedIn", "GitHub", "Twitter"];
-const contenedorRedes = document.querySelector('#contenedor-redes');
-console.log("Mis redes son:", redes[0]); 
-
-redes.forEach(red => {
-    const enlace = document.createElement('a');
-        enlace.innerText = red;
-        enlace.href = "#";
-        enlace.classList.add('link-red');
-
-
-        contenedorRedes.appendChild(enlace);
-        
-});
-
-
-
-
-
-
-
-const habilidades = ["React", "Node", "SQL", "Python", "AWS"];
-const contenedorUL = document.querySelector('#lista-skills');
-habilidades.forEach(skill => {
-  const nuevoItem = document.createElement('li');
-
-  nuevoItem.innerText = skill;
-  contenedorUL.appendChild(nuevoItem);
-  nuevoItem.addEventListener('click', () => nuevoItem.remove());
-});
-
-
-
-
-        
-
-const botonAgregar = document.querySelector('#boton-agregar');
-const inputHabilidad = document.querySelector('#input-habilidad');
-
-botonAgregar.addEventListener('click', () => {
-    const texto = inputHabilidad.value;
-
-    if (texto !== "") {
+    // 4. LA MÁQUINA DE CREAR Y GUARDAR
+    function crearHabilidad(texto, guardar = false) {
         const nuevoItem = document.createElement('li');
         nuevoItem.innerText = texto;
-        nuevoItem.addEventListener('click', () => nuevoItem.remove());
-        contenedorUL.appendChild(nuevoItem);
-        inputHabilidad.value = "";
-        inputHabilidad.focus();
-    } else {
-        alert("¡Escribe algo primero, Ingeniero!");
-    }
-    });
-
-    localStorage.setItem("h1", "Francisco Javier");
-    let miNombre = localStorage.getItem("h1");
-
-
-
-
-
-
+        nuevoItem.style.cursor = "pointer";
         
-
-    const botonGuardarNombre =document.querySelector('#boton-guardar-nombre');
-    const inputNombreNuevo = document.querySelector('#input-nombre-nuevo');
-    const tituloPrincipal = document.querySelector('h1');
-
-        botonGuardarNombre.addEventListener('click', () => {
-            const nuevoNombre = inputNombreNuevo.value;
-            if (nuevoNombre !== "") {
-                tituloPrincipal.innerText = nuevoNombre;
-                localStorage.setItem("h1", nuevoNombre);
-                alert("¡Tu nombre se ha guardado!");
-                inputNombreNuevo.value = "";
-            }
+        // Al hacer clic, se borra y se actualiza el baúl
+        nuevoItem.addEventListener('click', () => {
+            nuevoItem.remove();
+            habilidades = habilidades.filter(h => h !== texto); // La quitamos de la lista
+            localStorage.setItem("misSkills", JSON.stringify(habilidades)); // Guardamos
         });
 
+        contenedorUL.appendChild(nuevoItem);
 
+        if (guardar) {
+            habilidades.push(texto); // La añadimos a nuestra lista
+            localStorage.setItem("misSkills", JSON.stringify(habilidades)); // Guardamos en el baúl
+        }
+    }
 
+    // Dibujamos las habilidades que ya teníamos guardadas
+    habilidades.forEach(h => crearHabilidad(h));
 
-        
-        // 1. Creamos una "máquina" de fabricar habilidades
-function crearHabilidad(texto) {
-    const nuevoItem = document.createElement('li');
-    nuevoItem.innerText = texto;
-    // Le damos el poder de borrarse
-    nuevoItem.addEventListener('click', () => nuevoItem.remove());
-    contenedorUL.appendChild(nuevoItem);
-}
+    // 5. EVENTOS DE BOTONES
+    // Botón Modo Oscuro
+    document.querySelector('#tu-boton-id').addEventListener('click', (e) => {
+        const esOscuro = document.body.classList.toggle('dark-mode');
+        e.target.innerText = esOscuro ? "Modo Claro" : "Modo Oscuro";
+    });
 
+    // Botón Guardar Nombre
+    document.querySelector('#boton-guardar-nombre').addEventListener('click', () => {
+        const valor = inputNombreNuevo.value.trim();
+        if (valor) {
+            tituloPrincipal.innerText = valor;
+            localStorage.setItem("h1", valor);
+            inputNombreNuevo.value = "";
+        }
+    });
+
+    // Botón Añadir Habilidad
+    document.querySelector('#boton-agregar').addEventListener('click', () => {
+        const valor = inputHabilidad.value.trim();
+        if (valor) {
+            crearHabilidad(valor, true); // True para que la guarde en el baúl
+            inputHabilidad.value = "";
+        }
+    });
+
+    // Redes Sociales
+    const redesContenedor = document.querySelector('#contenedor-redes');
+    ["LinkedIn", "GitHub", "Twitter"].forEach(red => {
+        const a = document.createElement('a');
+        a.innerText = red;
+        a.href = "#";
+        a.classList.add('link-red');
+        redesContenedor.appendChild(a);
+    });
+</script>
 
 </script>  
        
