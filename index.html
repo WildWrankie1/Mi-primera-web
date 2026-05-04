@@ -31,6 +31,8 @@
             list-style-type: "👽";
             width: 200px;
             border-radius: 10px;
+            
+            
         }
 
         .clase-estudios {
@@ -80,7 +82,7 @@
         
     }
 
-    .link-red {
+    .link-red, button {
     display: inline-block;
     margin: 10px;
     padding: 8px 15px;
@@ -91,41 +93,86 @@
     transition: 0.3s; /* Animación suave */
 }
 
-.link-red:hover {
+.link-red:hover, button {
     background-color: #2980b9;
-    transform: scale(1.1); /* Se hace un poquito más grande al pasar el mouse */
+    transform: scale(1.2);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Se hace un poquito más grande al pasar el mouse */
 }
 
+
+.contenedor-principal {
+    display: grid;
+    /* Queremos 3 columnas: una pequeña, una grande y otra pequeña */
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* En el móvil, queremos que todo vuelva a ser una sola columna */
+@media (max-width: 768px) {
+    .contenedor-principal {
+        grid-template-columns: 1fr;
+    }
+}
+
+section {
+    background-color: rgba(255, 255, 255, 0.1); /* Un fondo sutil */
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra para dar profundidad */
+}
+
+/* Para que se vea bien en el modo oscuro */
+.dark-mode section {
+    border-color: #444;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+body, section, h1, p, ul, button {
+    transition: all 0.5s ease;
+}
+
+section:hover {
+    transform:  translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    border-color: #3498db
+
+}
+
+
     </style>
+
+
+
 </head>
 <body>
 
 
+<div class="contenedor-principal">
 
 
+<section>
+    
     <button id="tu-boton-id">Cambiar color</button>
 
     <p id = "contador-visual">Has cambiado el modo de color 0 veces</p>
     <br>
 
 
-
 <input type="text" id="input-nombre-nuevo" placeholder ="Escribe tu nuevo nombre">
+<br>
 <button id="boton-guardar-nombre"> Cambiar y Guardar nombre</button>
 <br>
 
-
-
     <h1>Francisco Javier</h1><br>
 
+</section>
 
 
-    <button id="boton-guardar-nombre">Guardar mi nombre</button>
-
-
-
-
-
+    
+    
+<section>
     <p>Ingeniero de Software</p>
 
     <div class="contenedor-listas">
@@ -141,18 +188,20 @@
             <li>Comer</li>
         </ol>
     </div>
-
-
     <a href="https://www.google.com">Ir a Google</a>
 
+</section>
+    
 
-    <div class="panel-control">
+
+
+
+<section>
+
+<div class="panel-control">
         <input type="text" id="input-habilidad" placeholder="Nueva habilidad...">
         <button id="boton-agregar">Añadir a la lista</button>
     </div>
-
-
-
 
 
     <h3>Mis Skills (Generadas con JS)</h3>
@@ -162,15 +211,13 @@
 <div id="contenedor-redes">
 <h3>Mis Redes Sociales (Generadas con JS)</h3>
 <ul id="lista-redes"></ul>
-</div>
-
-
-
-
-
+    
+</div>    
+</section>
 
 
     <script>
+        
 
 
 const nombreGuardado = localStorage.getItem("h1");
@@ -179,6 +226,8 @@ if (nombreGuardado) {
     document.querySelector('h1').innerText = nombreGuardado;
 }
 
+
+        
 
         const boton = document.querySelector('#tu-boton-id');
 const textoContador = document.querySelector('#contador-visual'); // Referencia al texto
@@ -238,6 +287,9 @@ habilidades.forEach(skill => {
 
 
 
+
+        
+
 const botonAgregar = document.querySelector('#boton-agregar');
 const inputHabilidad = document.querySelector('#input-habilidad');
 
@@ -264,6 +316,8 @@ botonAgregar.addEventListener('click', () => {
 
 
 
+        
+
     const botonGuardarNombre =document.querySelector('#boton-guardar-nombre');
     const inputNombreNuevo = document.querySelector('#input-nombre-nuevo');
     const tituloPrincipal = document.querySelector('h1');
@@ -278,21 +332,21 @@ botonAgregar.addEventListener('click', () => {
             }
         });
 
-        botonGuardarNombre.addEventListener('click', () => {
-            localStorage.setItem("h1", miNombre);
-            alert("¡Tu nombre se ha guardado!");
-        });
 
+
+
+        
+        // 1. Creamos una "máquina" de fabricar habilidades
+function crearHabilidad(texto) {
+    const nuevoItem = document.createElement('li');
+    nuevoItem.innerText = texto;
+    // Le damos el poder de borrarse
+    nuevoItem.addEventListener('click', () => nuevoItem.remove());
+    contenedorUL.appendChild(nuevoItem);
+}
 
 
 </script>  
-
-
-
-
-
-
-
        
 </body>
 </html>
